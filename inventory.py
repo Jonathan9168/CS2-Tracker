@@ -29,7 +29,7 @@ def generate_driver():
 
 
 def scrape_inventory():
-    """Scrapes items from specified Steam inventory
+    """Scrapes only marketable items from a specified Steam inventory
 
     flag: determines whether to stop scraping based on an empty inventory slot or disabled forward pagination button
     processed_count: keeps track of how many items have been processed so seen items are not reprocessed
@@ -71,9 +71,11 @@ def scrape_inventory():
                 print(f"[{processed_count + 1}] {item_name:^50} -> [{item_tag}]")
                 processed_count += 1
 
-                add_item_to_excel(item_name, item_tag, max_row)
-                max_row += 1
-
+                # check if the item is marketable (has value)
+                if item_tag.split(",")[-1].strip() == "Marketable":
+                    add_item_to_excel(item_name, item_tag, max_row)
+                    max_row += 1
+                    
             else:
                 flag = False
                 break
