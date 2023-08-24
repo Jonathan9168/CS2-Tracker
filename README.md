@@ -25,7 +25,7 @@ Below is an explanation of each column and metric used in the spreadsheet:
 - **Current Value % Change:** Percentage change from the last value in the corresponding 'Current Value [Steam]' column.
 - **Price Difference:** Difference between the current value and the purchase price.
 - **Sold Price:** Price for which the item was sold, where applicable.
-- **Current Value Updated:** Denotes whether an item's value was updated. 'y' for successful updates and 'n' for unsuccessful ones (e.g., due to incorrect spelling or untradable/unmarketable items).
+- **Current Value Updated:** Denotes whether an item's value was updated. 'y' for successful updates and 'n' for unsuccessful ones (e.g., due to incorrect spelling or error 429).
 - **Expected Profit (Steam):** The expected profit that can be realized if unsold items are listed at the Steam market value price, accounting for the ~15% Steam fee.
 - **Actual Profit:** The actual profit made from confirmed sales.
 
@@ -45,7 +45,7 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 ## Inventory Scraper (inventory.py)
 
 ```
-Populates the template file with the user's CSGO inventory items.
+Populates the template file with the user's marketable CSGO inventory items.
 ```
 
 ### File Paths
