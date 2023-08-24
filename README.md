@@ -42,7 +42,7 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 4. **Initiate Sorting:** Click the ```'Sort & Filter'``` ribbon and select ```'Custom Sort'```, the user can then select which column to use as the key along with the sort direction.
 
 
-## Inventory Scraper (inventory.py)
+## Inventory Scraper [```inventory.py```]
 
 ```
 Populates the template file with the user's marketable CSGO inventory items.
@@ -70,7 +70,7 @@ Populates the template file with the user's marketable CSGO inventory items.
 154.     wb.save(file_path_desktop)
 ```
 
-## Price Updater (csgo.py)
+## Price Updater [```csgo.py```]
 
 ```
 Updates the user's spreadsheet with the current lowest Steam market price listing values for their items.
