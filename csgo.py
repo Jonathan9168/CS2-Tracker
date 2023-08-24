@@ -6,7 +6,7 @@ from urllib.parse import quote
 from openpyxl import load_workbook
 
 
-def get_current_item_value(name, max_retries=3, ttw=2.5):
+def get_current_item_value(name, max_retries=1, ttw=2.5):
     """
 
     Retrieves CSGO item price from Steam endpoint
