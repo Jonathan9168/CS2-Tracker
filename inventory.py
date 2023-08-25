@@ -1,11 +1,13 @@
 import re
 import time
+import config
 from copy import copy
 from datetime import datetime
 from selenium import webdriver
 import chromedriver_autoinstaller
 from openpyxl import load_workbook
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,7 +26,15 @@ def generate_driver():
     chromeOption.add_argument("--silent")
     chromeOption.add_argument("--disable-blink-features=AutomationControlled")
     chromeOption.add_experimental_option("excludeSwitches", ['enable-automation'])
-    driver = webdriver.Chrome(options=chromeOption)
+
+    if config.chrome_driver_executable_path is None:
+        driver = webdriver.Chrome(options=chromeOption)
+    else:
+        driver = webdriver.Chrome(
+            options=chromeOption,
+            service=Service(executable_path=config.chrome_driver_executable_path)
+        )
+
     return driver
 
 
@@ -153,7 +163,9 @@ def save_excel():
     """Saves the updated Excel file with the original formatting to specified directories"""
 
     wb.save(file_path_local)
-    wb.save(file_path_desktop)
+
+    if file_path_desktop is not None:
+        wb.save(file_path_desktop)
 
 
 if __name__ == "__main__":
@@ -170,8 +182,8 @@ if __name__ == "__main__":
 
     # load Excel spreadsheet into workbook
     base_path = 'base_file.xlsx'
-    file_path_local = 'modified_spreadsheet.xlsx'
-    file_path_desktop = r'C:\Users\Jonathan\Desktop\modified_spreadsheet.xlsx'
+    file_path_local = config.file_path_local
+    file_path_desktop = config.file_path_desktop
 
     wb = load_workbook(base_path)
     ws = wb.active
