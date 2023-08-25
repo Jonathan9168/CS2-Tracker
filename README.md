@@ -94,7 +94,7 @@ Updates the user's spreadsheet with the current lowest Steam market price listin
 Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
 
 
-![bc6eca941edfa96e8cc96dbc161b2e53](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/9658140d-790c-4725-8dae-43beda4cbd86)
+![1ffefa33de9cc8de11f246bf92c248d2](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/b2536e99-8829-4446-a688-f3f196281163)
 
 
 ## How To Run
