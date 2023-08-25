@@ -110,7 +110,7 @@ The user's original spreadsheet is overwritten and a copy is saved to the deskto
 
 ## How To Run
 
-1. ```pip install requirements.txt```
+1. ```pip install -r requirements.txt```
 2. Configure file paths in ```inventory.py``` and ```csgo.py```
 3. ```python inventory.py``` Input your Steam inventory URL when prompted (inventory must be public)
 4. Fill in item purchase prices in the generated spreasheet
