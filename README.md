@@ -44,10 +44,15 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 
 ## Inventory Scraper [```inventory.py```]
 
-```
-Populates the template file with the user's marketable CSGO inventory items.
-Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
-```
+
+Populates the template file with the user's marketable CSGO inventory items.  
+
+### Chromedriver (attempts to fetch automatically)  
+
+If by chance your Chrome version is very new, you can download the win64 driver from :   
+https://googlechromelabs.github.io/chrome-for-testing/#stable
+
+View your Chrome version here: chrome://settings/help
 
 ![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/995f9f52-f8b6-4918-b252-89086a0b5163)
 
@@ -75,11 +80,11 @@ Option A is prone to rate limits so item requests are throttled by default to on
 
 ## Price Updater [```csgo.py```]
 
-```
-Updates the user's spreadsheet with the current lowest Steam market price listing values for their items.
-Requires Chromedriver (attempts to fetch automatically)
-If by chance your Chrome version is very new, you can download the win64 driver from : https://googlechromelabs.github.io/chrome-for-testing/#stable
-```
+
+Updates the user's spreadsheet with the current lowest Steam market price listing values (option A) or CSGO Trader daily/weekly averages (options B and C).  
+
+Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
+
 
 ![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/f470566f-c5b8-4853-a968-3a37e104326f)
 
