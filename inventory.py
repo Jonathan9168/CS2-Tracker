@@ -181,7 +181,7 @@ if __name__ == "__main__":
     base_url += "#730"
 
     # load Excel spreadsheet into workbook
-    base_path = 'base_file.xlsx'
+    base_path = config.base_path
     file_path_local = config.file_path_local
     file_path_desktop = config.file_path_desktop
 
