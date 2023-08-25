@@ -41,40 +41,48 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 
 4. **Initiate Sorting:** Click the ```'Sort & Filter'``` ribbon and select ```'Custom Sort'```, the user can then select which column to use as the key along with the sort direction.
 
+## File Paths [```config.py```]
+
+- **base_path:** By default, the ```inventory.py``` script assumes that ```'base_file.xslx'``` (template to be populated) is at the same directory level, if not, change accordingly.
+- **file_path_local:** The output directory of the newly created spreadsheet after scraping items with ```inventory.py```, change the output name as desired. This is also used as the input file in ```csgo.py``` when updating values for a given spreadsheet.
+- **file_path_desktop:** Same file as ```'file_path_local'```.  If the file should also be available on your desktop, you can specify your desktop directory here, or you can leave as ```None``` if not needed.
+- **chrome_driver_executable_path:** Full path to the Chromdriver executable downloaded (ideally in the same directory as the scripts). If there is no chromedriver version mismatch, leave as ```None```.
+  
+```python
+1. base_path = 'base_file.xlsx'  # template file
+2. file_path_local = '<file_name>.xlsx'  # output file in same directory as scripts
+3. file_path_desktop = None  # file output to desktop (if you want to) e.g., r'<path_to_desktop>/<file_name>.xlsx'
+4. chrome_driver_executable_path = None  # full path to chromedriver executable if driver not found
+
+```
+
+The ```save_excel()``` functions in ```inventory.py``` and ```csgo.py``` save the output files to the directories specified in ```config.py```.
+
+```python
+def save_excel():
+    """Saves the updated Excel file with the original formatting to specified directories"""
+
+    wb.save(file_path_local)
+
+    if file_path_desktop is not None:
+        wb.save(file_path_desktop)
+```
 
 ## Inventory Scraper [```inventory.py```]
 
 
 Populates the template file with the user's marketable CSGO inventory items.  
 
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/8704e88b-ad2e-40dc-8b14-17bb066e60d4)
+![25e7c5b4109a1527aba62bc7097cdf20](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/b9361c20-5ed6-488b-bf08-52c794c1c722)
 
-### File Paths
-
-- **base_path:** By default, the script assumes that ```'base_file.xslx'``` (template) is at the same directory level, if not, change accordingly.
-- **file_path_local:** The output directory of the newly created spreadsheet after scraping items, change the output name as desired. 
-- **file_path_desktop:** Same file as ```'file_path_local'```.  If the file should also be available on your desktop, you can specify your desktop directory here, or you can simply omit this line if it's not needed.
-  
-```python
-170. base_path = 'base_file.xlsx'
-171. file_path_local = 'modified_spreadsheet.xlsx'
-172. file_path_desktop = r'C:\Users\<your_user_name>\Desktop\modified_spreadsheet.xlsx'
-```
-
-```'base_file.xslx'``` is not overwritten, a new spreadsheet containing the user's item is created at the same directory level as the script and a copy is saved to the desktop (where applicable) via the ```save_excel()``` function.
-
-```python
-150. def save_excel():
-151.     """Saves the updated Excel file with the original formatting to specified directories"""
-152.
-153.     wb.save(file_path_local)
-154.     wb.save(file_path_desktop)
-```
 
 ### Chromedriver (attempts to fetch automatically)  
 
-If by chance your Chrome version is very new, you can download the win64 driver from :   
-https://googlechromelabs.github.io/chrome-for-testing/#stable
+If by chance your Chrome version is very new, there may be a driver vesrison mismatch error,
+Chromedrivers can be downloaded from:   
+https://googlechromelabs.github.io/chrome-for-testing/#stable and https://chromedriver.chromium.org/downloads
+
+Simply drag and drop the Chromedriver executable into the same folder as the script.
 
 View your Chrome version here: chrome://settings/help
 
@@ -86,32 +94,13 @@ Updates the user's spreadsheet with the current lowest Steam market price listin
 Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
 
 
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/a139fdec-4be8-4da1-81e4-8c2c6aa551d1)
+![bc6eca941edfa96e8cc96dbc161b2e53](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/9658140d-790c-4725-8dae-43beda4cbd86)
 
-### File Paths
-
-- **file_path_local:** By default, the script assumes that the user's spreadsheet is at the same directory level, if not, change accordingly.
-- **file_path_desktop:** = Same file as ```'file_path_local'```.  If the file should also be available on your desktop, you can specify your desktop directory here, or you can simply omit this line if it's not needed.
-
-```python
-209.    file_path_local = '<file_name>.xlsx'
-210.    file_path_desktop = r'C:\Users\<your_user_name>\Desktop\<file_name>.xlsx'
-```
-
-The user's original spreadsheet is overwritten and a copy is saved to the desktop (where applicable) via the ```save_excel()``` function.
-
-```python
-199. def save_excel():
-200.     """Saves the updated Excel file with the original formatting to specified directories"""
-201.
-202.     wb.save(file_path_local)
-203.     wb.save(file_path_desktop)
-```
 
 ## How To Run
 
 1. ```pip install -r requirements.txt```
-2. Configure file paths in ```inventory.py``` and ```csgo.py```
+2. Configure file paths in ```config.py```
 3. ```python inventory.py``` Input your Steam inventory URL when prompted (inventory must be public)
 4. Fill in item purchase prices in the generated spreasheet
 5. ```python csgo.py``` to update item current values
