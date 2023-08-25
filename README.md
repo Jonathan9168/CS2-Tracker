@@ -10,7 +10,7 @@ Provides price tracking and metrics on the user's CSGO items.
 
 ### Example
 
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/e0d51a7b-61c5-4df2-ba56-0622cd829f30)
+![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/397e875d-df81-4e75-9a44-4b64d01e1535)
 
 ### Columns and Metrics
 
@@ -31,7 +31,7 @@ Below is an explanation of each column and metric used in the spreadsheet:
 
 ### Sorting
 
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/627b8c87-60a9-4326-88c0-6532b8dfb880)
+![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/24e16cd7-d89e-4b6a-945b-7c896392f4e0)
 
 To utilize Excel's built-in sorting and analysis features wihtout including summary boxes on the right:
 
@@ -47,14 +47,7 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 
 Populates the template file with the user's marketable CSGO inventory items.  
 
-### Chromedriver (attempts to fetch automatically)  
-
-If by chance your Chrome version is very new, you can download the win64 driver from :   
-https://googlechromelabs.github.io/chrome-for-testing/#stable
-
-View your Chrome version here: chrome://settings/help
-
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/995f9f52-f8b6-4918-b252-89086a0b5163)
+![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/8704e88b-ad2e-40dc-8b14-17bb066e60d4)
 
 ### File Paths
 
@@ -78,6 +71,13 @@ View your Chrome version here: chrome://settings/help
 154.     wb.save(file_path_desktop)
 ```
 
+### Chromedriver (attempts to fetch automatically)  
+
+If by chance your Chrome version is very new, you can download the win64 driver from :   
+https://googlechromelabs.github.io/chrome-for-testing/#stable
+
+View your Chrome version here: chrome://settings/help
+
 ## Price Updater [```csgo.py```]
 
 
@@ -86,7 +86,7 @@ Updates the user's spreadsheet with the current lowest Steam market price listin
 Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
 
 
-![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/f470566f-c5b8-4853-a968-3a37e104326f)
+![image](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/a139fdec-4be8-4da1-81e4-8c2c6aa551d1)
 
 ### File Paths
 
