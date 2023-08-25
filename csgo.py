@@ -2,11 +2,12 @@ import time
 import requests
 import pandas as pd
 from datetime import datetime
+from bs4 import BeautifulSoup
 from urllib.parse import quote
 from openpyxl import load_workbook
 
 
-def get_current_item_value(name, max_retries=2, ttw=3):
+def get_current_item_value_steam(name, max_retries=1, ttw=3):
     """
 
     Retrieves CSGO item price from Steam endpoint
@@ -59,6 +60,55 @@ def get_current_item_value(name, max_retries=2, ttw=3):
             print("An error occurred:", e)
 
     return False
+
+
+def get_current_item_value_cs_trader(name):
+    """
+
+    Retrieves CSGO item price from CSGO Trader (updated every 8 hours)
+
+    cs_trader_json structure:
+
+    "<item_name>": {
+    "steam": {
+      "last_24h": 0.03,
+      "last_7d": 0.03,
+      "last_30d": 0.03,
+      "last_90d": 0.03
+    },
+    "lootfarm": null,
+    "csgotm": "0.006",
+    "skinport": { "suggested_price": 0.03, "starting_at": 0.02 },
+    "csgoempire": 0.01,
+    "swapgg": 0.03,
+    "csgoexo": null,
+    "cstrade": null,
+    "skinwallet": null,
+    "buff163": {
+      "starting_at": { "price": null },
+      "highest_order": { "price": null }
+        }
+    }
+
+    """
+
+    try:
+        price = 0
+
+        if option == "b":
+            price = cs_trader_json[name]["steam"]["last_24h"]
+        elif option == "c":
+            price = cs_trader_json[name]["steam"]["last_7d"]
+
+        value = float(price) * float(conversion_rate)
+
+        # Steam price floor value
+        if value < 0.03:
+            return 0.03
+        return value
+
+    except KeyError as e:
+        print("An error occurred:", e)
 
 
 def percentage_change(old_value, new_value):
@@ -125,7 +175,10 @@ def update_dataframe():
             continue
 
         # Skin hasn't been processed yet
-        current_value = get_current_item_value(name=item_name)
+        if option == "a":
+            current_value = get_current_item_value_steam(name=item_name)
+        else:
+            current_value = get_current_item_value_cs_trader(name=item_name)
 
         if current_value is False:  # Invalid item due to typo in file or JSON response failure, don't update item and write "n"
             update_dataframe_failure(index)
@@ -170,6 +223,7 @@ def dataframe_to_excel():
 
     # Write the updated "Current Value," "Current Value % Change," and "Current Value Updated" columns to the Excel file
     for index, (current_value, current_value_change, current_value_updated) in enumerate(zip(df['Current Value [Steam]'], df['Current Value % Change'], df['Current Value Updated']), start=2):
+
         cell_current_value = f'F{index}'  # Assuming the "Current Value [Steam]" column is column F
         cell_current_value_change = f'G{index}'  # Assuming the "Current Value % Change" column is column G
         cell_current_value_updated = f'J{index}'  # Assuming the "Current Value Updated" column is column J
@@ -203,11 +257,42 @@ def save_excel():
     wb.save(file_path_desktop)
 
 
+def get_conversion_rate():
+    """Retrieves USD -> GBP conversion rate"""
+
+    url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=GBP"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.content, 'html.parser')
+
+    return soup.find('p', class_='result__BigRate-sc-1bsijpp-1 iGrAod').text[:-14]
+
+
+def main_menu():
+    """Option Menu"""
+
+    print("\n[A] Update current values using live Steam Prices")
+    print("[B] Update current values using CSGO Trader 24hr Avg [Updated every 8 hours]")
+    print("[C] Update current values using CSGO Trader 7day Avg [Updated every 8 hours]")
+    choice = input("Select an option: ").strip().lower()
+    return choice
+
+
 if __name__ == "__main__":
 
+    option = main_menu()
+    valid_options = {"a", "b", "c"}
+
+    if option not in valid_options:
+        print("invalid option")
+        quit(0)
+
+    if option == "b" or option == "c":
+        conversion_rate = get_conversion_rate()
+        cs_trader_json = requests.get("https://prices.csgotrader.app/latest/prices_v6.json").json()
+
     # Load Excel spreadsheet into workbook and Pandas dataframe
-    file_path_local = '<file_name>.xlsx'
-    file_path_desktop = r'C:\Users\<your_user_name>\Desktop\<file_name>.xlsx'
+    file_path_local = 'modified_spreadsheet.xlsx'
+    file_path_desktop = r'C:\Users\Jonathan\Desktop\modified_spreadsheet.xlsx'
 
     df = pd.read_excel(file_path_local)
     wb = load_workbook(file_path_local)

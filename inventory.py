@@ -75,7 +75,7 @@ def scrape_inventory():
                 if item_tag.split(",")[-1].strip() == "Marketable":
                     add_item_to_excel(item_name, item_tag, max_row)
                     max_row += 1
-                    
+
             else:
                 flag = False
                 break
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     # load Excel spreadsheet into workbook
     base_path = 'base_file.xlsx'
     file_path_local = 'modified_spreadsheet.xlsx'
-    file_path_desktop = r'C:\Users\<your_user_name>\Desktop\modified_spreadsheet.xlsx'
+    file_path_desktop = r'C:\Users\Jonathan\Desktop\modified_spreadsheet.xlsx'
 
     wb = load_workbook(base_path)
     ws = wb.active
