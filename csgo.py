@@ -1,4 +1,5 @@
 import time
+import config
 import requests
 import pandas as pd
 from datetime import datetime
@@ -222,8 +223,8 @@ def dataframe_to_excel():
     """Update Excel file with updated values from dataframe"""
 
     # Write the updated "Current Value," "Current Value % Change," and "Current Value Updated" columns to the Excel file
-    for index, (current_value, current_value_change, current_value_updated) in enumerate(zip(df['Current Value [Steam]'], df['Current Value % Change'], df['Current Value Updated']), start=2):
-
+    for index, (current_value, current_value_change, current_value_updated) in enumerate(
+            zip(df['Current Value [Steam]'], df['Current Value % Change'], df['Current Value Updated']), start=2):
         cell_current_value = f'F{index}'  # Assuming the "Current Value [Steam]" column is column F
         cell_current_value_change = f'G{index}'  # Assuming the "Current Value % Change" column is column G
         cell_current_value_updated = f'J{index}'  # Assuming the "Current Value Updated" column is column J
@@ -254,7 +255,9 @@ def save_excel():
     """Saves the updated Excel file with the original formatting to specified directories"""
 
     wb.save(file_path_local)
-    wb.save(file_path_desktop)
+
+    if file_path_desktop is not None:
+        wb.save(file_path_desktop)
 
 
 def get_conversion_rate():
@@ -291,8 +294,8 @@ if __name__ == "__main__":
         cs_trader_json = requests.get("https://prices.csgotrader.app/latest/prices_v6.json").json()
 
     # Load Excel spreadsheet into workbook and Pandas dataframe
-    file_path_local = 'modified_spreadsheet.xlsx'
-    file_path_desktop = r'C:\Users\<your_name_here>\Desktop\modified_spreadsheet.xlsx'
+    file_path_local = config.file_path_local
+    file_path_desktop = config.file_path_desktop
 
     df = pd.read_excel(file_path_local)
     wb = load_workbook(file_path_local)
