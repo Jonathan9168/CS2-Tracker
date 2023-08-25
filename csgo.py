@@ -292,7 +292,7 @@ if __name__ == "__main__":
 
     # Load Excel spreadsheet into workbook and Pandas dataframe
     file_path_local = 'modified_spreadsheet.xlsx'
-    file_path_desktop = r'C:\Users\Jonathan\Desktop\modified_spreadsheet.xlsx'
+    file_path_desktop = r'C:\Users\<your_name_here>\Desktop\modified_spreadsheet.xlsx'
 
     df = pd.read_excel(file_path_local)
     wb = load_workbook(file_path_local)
