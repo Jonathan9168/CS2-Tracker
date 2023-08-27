@@ -55,10 +55,16 @@ def scrape_inventory():
     driver.get(base_url)
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'acceptAllButton'))).click()
 
+    print("Scraping Items...\n")
+
     while flag:
 
         # find item holder elements
         items = driver.find_elements(By.CLASS_NAME, 'itemHolder')
+
+        if len(items) == 0:
+            print("Inventory is private.")
+            quit(0)
 
         for i, item in enumerate(items[processed_count:]):
 
@@ -171,7 +177,7 @@ def save_excel():
 if __name__ == "__main__":
 
     # user Steam inventory URL input combined with #730 for CSGO
-    pattern = r'https://steamcommunity\.com/id/[\w-]+/inventory/'
+    pattern = r'https://steamcommunity\.com/(id|profiles)/[\w-]+/inventory/'
     base_url = input("Steam Inventory URL: ")
 
     if not re.match(pattern, base_url):
