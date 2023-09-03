@@ -53,6 +53,9 @@ def get_current_item_value_steam(name, max_retries=1, ttw=3):
                 else:
                     continue
 
+            if response.status_code == 429:
+                print("Rate Limited!")
+
         except KeyError as e:
             if "median_price" in response_data:
                 return float(response_data['median_price'][1:])
