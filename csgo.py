@@ -8,13 +8,12 @@ from urllib.parse import quote
 from openpyxl import load_workbook
 
 
-def get_current_item_value_steam(name, max_retries=1, ttw=3):
+def get_current_item_value_steam(name, ttw=3):
     """
 
     Retrieves CSGO item price from Steam endpoint
 
     name: item name
-    max_retries: maximum number of times to attempt to fetch price data for item if the request was unsuccessful
     ttw (time to wait): to prevent error 429, add wait time between requests
     response: reply from Steam endpoint
 
@@ -35,33 +34,34 @@ def get_current_item_value_steam(name, max_retries=1, ttw=3):
     :returns: current Steam market listing price (successful) or False (unsuccessful)
 
     """
+    global rate_limited
+
+    if rate_limited is True:
+        return False
 
     response_data = None
 
-    for _ in range(max_retries):
-        try:
-            link = f"https://steamcommunity.com/market/priceoverview/?currency=2&appid=730&market_hash_name={quote(name)}"
-            response = requests.get(link)
-            time.sleep(ttw)
+    try:
+        link = f"https://steamcommunity.com/market/priceoverview/?currency=2&appid=730&market_hash_name={quote(name)}"
+        response = requests.get(link)
+        time.sleep(ttw)
 
-            if response.ok:
+        if response.ok:
+            response_data = response.json()
 
-                response_data = response.json()
+            if response_data["success"] is True:
+                return float(response_data['lowest_price'][1:])
 
-                if response_data["success"] is True:
-                    return float(response_data['lowest_price'][1:])
-                else:
-                    continue
+        if response.status_code == 429:
+            rate_limited = True
+            print("Rate Limited!")
 
-            if response.status_code == 429:
-                print("Rate Limited!")
+    except KeyError as e:
+        if "median_price" in response_data:
+            return float(response_data['median_price'][1:])
 
-        except KeyError as e:
-            if "median_price" in response_data:
-                return float(response_data['median_price'][1:])
-
-            print(response_data)
-            print("An error occurred:", e)
+        print(response_data)
+        print("An error occurred:", e)
 
     return False
 
@@ -291,6 +291,11 @@ if __name__ == "__main__":
     if option not in valid_options:
         print("invalid option")
         quit(0)
+
+    rate_limited = None
+
+    if option == "a":
+        rate_limited = False
 
     if option == "b" or option == "c":
         conversion_rate = get_conversion_rate()
