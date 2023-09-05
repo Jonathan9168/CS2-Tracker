@@ -278,8 +278,9 @@ def main_menu():
 
     print("\n[A] Update current values using live Steam Prices")
     print("[B] Update current values using CSGO Trader 24hr Avg [Updated every 8 hours]")
-    print("[C] Update current values using CSGO Trader 7day Avg [Updated every 8 hours]")
+    print("[C] Update current values using CSGO Trader 7day Avg [Updated every 8 hours]\n")
     choice = input("Select an option: ").strip().lower()
+    print()
     return choice
 
 

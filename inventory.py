@@ -63,7 +63,7 @@ def scrape_inventory():
         items = driver.find_elements(By.CLASS_NAME, 'itemHolder')
 
         if len(items) == 0:
-            print("Inventory is private.")
+            print("The inventory is private or unavailable.")
             quit(0)
 
         for i, item in enumerate(items[processed_count:]):
