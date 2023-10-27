@@ -270,7 +270,7 @@ def get_conversion_rate():
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'html.parser')
 
-    return soup.find('p', class_='result__BigRate-sc-1bsijpp-1 iGrAod').text[:-14]
+    return soup.find('p', class_='result__BigRate-sc-1bsijpp-1 dPdXSB').text[:-14]
 
 
 def main_menu():
