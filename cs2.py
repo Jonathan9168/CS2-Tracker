@@ -11,7 +11,7 @@ from openpyxl import load_workbook
 def get_current_item_value_steam(name, ttw=3):
     """
 
-    Retrieves CSGO item price from Steam endpoint
+    Retrieves CS2 item price from Steam endpoint
 
     name: item name
     ttw (time to wait): to prevent error 429, add wait time between requests
@@ -69,7 +69,7 @@ def get_current_item_value_steam(name, ttw=3):
 def get_current_item_value_cs_trader(name):
     """
 
-    Retrieves CSGO item price from CSGO Trader (updated every 8 hours)
+    Retrieves CS2 item price from CSGO Trader (updated every 8 hours)
 
     cs_trader_json structure:
 
@@ -103,6 +103,11 @@ def get_current_item_value_cs_trader(name):
             price = cs_trader_json[name]["steam"]["last_24h"]
         elif option == "c":
             price = cs_trader_json[name]["steam"]["last_7d"]
+        elif option == "d":
+            price = cs_trader_json[name]["skinport"]["suggested_price"]
+
+        if price is None:
+            return False
 
         value = float(price) * float(conversion_rate)
 
@@ -142,7 +147,7 @@ def calculate_expected_profit():
     where the corresponding value in column I (Sold Price) is "N/A",
     this means that only items that have not been sold are factored into the calculation.
 
-    Finally, the sum is multiplied by 0.85 to account for Steam selling fees (5% Steam + 10% game fee [CSGO])
+    Finally, the sum is multiplied by 0.85 to account for Steam selling fees (5% Steam + 10% game fee [CS2])
 
     :returns: The expected profit if the items are sold at Steam market value
 
@@ -269,7 +274,6 @@ def get_conversion_rate():
     url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=GBP"
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'html.parser')
-
     return soup.find('p', class_='result__BigRate-sc-1bsijpp-1 dPdXSB').text[:-14]
 
 
@@ -277,8 +281,9 @@ def main_menu():
     """Option Menu"""
 
     print("\n[A] Update current values using live Steam Prices")
-    print("[B] Update current values using CSGO Trader 24hr Avg [Updated every 8 hours]")
-    print("[C] Update current values using CSGO Trader 7day Avg [Updated every 8 hours]\n")
+    print("[B] Update current values using CSGO Trader Steam 24hr Avg [Updated every 8 hours]")
+    print("[C] Update current values using CSGO Trader Steam 7day Avg [Updated every 8 hours]")
+    print("[D] Update current values using CSGO Trader Skinport Suggested Price [Updated every 8 hours]\n")
     choice = input("Select an option: ").strip().lower()
     print()
     return choice
@@ -287,7 +292,7 @@ def main_menu():
 if __name__ == "__main__":
 
     option = main_menu()
-    valid_options = {"a", "b", "c"}
+    valid_options = {"a", "b", "c", "d"}
 
     if option not in valid_options:
         print("invalid option")
@@ -297,9 +302,8 @@ if __name__ == "__main__":
 
     if option == "a":
         rate_limited = False
-
-    if option == "b" or option == "c":
-        conversion_rate = get_conversion_rate()
+    else:
+        conversion_rate = get_conversion_rate().strip()
         cs_trader_json = requests.get("https://prices.csgotrader.app/latest/prices_v6.json").json()
 
     # Load Excel spreadsheet into workbook and Pandas dataframe

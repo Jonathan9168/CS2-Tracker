@@ -4,6 +4,7 @@ import config
 from copy import copy
 from datetime import datetime
 from selenium import webdriver
+from openpyxl.styles import Font
 import chromedriver_autoinstaller
 from openpyxl import load_workbook
 from selenium.webdriver.common.by import By
@@ -130,7 +131,18 @@ def add_item_to_excel(item_name, item_tag, max_row):
 
     date = f'{datetime.now().strftime("%d/%m/%Y")}'
     item = item_name
-    condition = f"{item_tag.split(',')[5] if item_tag.split(',')[0] in conditional_items_filter else ''}"
+
+    split_values = item_tag.split(',')
+
+    # special Glove/Knife condition cases
+    wear_index = (
+        6 if split_values[0] == "Knife" and len(split_values) >= 9 else
+        3 if split_values[0] == "Gloves" else
+        4 if split_values[0] == "Knife" else
+        5
+    )
+
+    condition = f"{split_values[wear_index] if split_values[0] in conditional_items_filter else ''}"
     purchase_platform = "Steam"
     purchase_price = 0.03
     current_value = 0.03
@@ -154,6 +166,18 @@ def add_item_to_excel(item_name, item_tag, max_row):
     for j, new_cell in enumerate(data):
         ws.cell(row=new_row, column=j + 1, value=data[j])
 
+    item_tag_list = item_tag.split(",")
+    item_tag_list_stripped = [s.strip() for s in item_tag_list]
+
+    name_colour = get_color(item_tag_list_stripped)
+
+    if name_colour is not None:
+        name_colour_aRGB = RGB_Hex_To_aRGB_Hex(name_colour)
+        name_cell = ws.cell(row=new_row, column=2)  # Assuming item name is in the second column
+
+        font = Font(color=name_colour_aRGB, bold="yes", name="Open Sans", sz=10)
+        name_cell.font = font
+
 
 def apply_difference_formula():
     """Applies price difference formula to column H"""
@@ -174,9 +198,25 @@ def save_excel():
         wb.save(file_path_desktop)
 
 
+def get_color(tag_list):
+    """Retrieves item rarity colour"""
+
+    for item in tag_list:
+        if item.strip() in item_rarities:
+            return item_rarities[item]
+    return None
+
+
+def RGB_Hex_To_aRGB_Hex(RGB_Hex):
+    """Converts RGB Hex to aRGB format"""
+
+    aRGB_Hex = 'FF' + RGB_Hex[1:]
+    return aRGB_Hex
+
+
 if __name__ == "__main__":
 
-    # user Steam inventory URL input combined with #730 for CSGO
+    # user Steam inventory URL input combined with #730 for CS2
     pattern = r'https://steamcommunity\.com/(id|profiles)/[\w-]+/inventory/'
     base_url = input("Steam Inventory URL: ")
 
@@ -197,8 +237,30 @@ if __name__ == "__main__":
     # get first row of cells from column A-J so cell in column can inherit styling
     row_styles = ws[1][:10]
 
-    # valid weapon categories to help filter for conditional items
-    conditional_items_filter = {"Rifle", "SMG", "Shotgun", "Pistol", "Sniper Rifle", "Knife", "Machinegun"}
+    # valid categories to help filter for wear-able items
+    conditional_items_filter = {"Rifle", "SMG", "Shotgun", "Pistol", "Sniper Rifle", "Knife", "Machinegun", "Gloves"}
+
+    # item rarity colour codes
+    item_rarities = {
+        'Consumer Grade': '#B0C3D9',
+        'Industrial Grade': '#5E98D9',
+        'Mil-Spec Grade': '#4B69FF',
+        'Restricted': '#8847FF',
+        'Classified': '#D32CE6',
+        'Covert': '#EB4B4B',
+        'Contraband': '#E4AE33',
+        'Clandestine': '#E4AE33',
+        'UNNAMED': '#ADE55C',
+        'Base Grade': '#B0C3D9',
+        'Medium Grade': '#5E98D9',
+        'High Grade': '#4B69FF',
+        'Remarkable': '#8847FF',
+        'Exotic': '#D32CE6',
+        'Distinguished': '#4B69FF',
+        'Exceptional': '#8847FF',
+        'Superior': '#D32CE6',
+        'Master': '#EB4B4B',
+    }
 
     scrape_inventory()
     apply_difference_formula()
