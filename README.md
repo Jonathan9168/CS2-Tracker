@@ -21,7 +21,7 @@ Below is an explanation of each column and metric used in the spreadsheet:
 - **Condition:** Wear of the item where applicable.
 - **Purchase Platform:** Platform from which the item was bought (e.g., Steam or third-party marketplaces).
 - **Purchase Price:** Price at which the item was bought.
-- **Current Value [Steam]:** Current lowest Steam market listing price for the item.
+- **Current Value [Steam]:** Current lowest Steam market listing* (or Skinport suggested price) price for the item.
 - **Current Value % Change:** Percentage change from the last value in the corresponding 'Current Value [Steam]' column.
 - **Price Difference:** Difference between the current value and the purchase price.
 - **Sold Price:** Price for which the item was sold, where applicable.
