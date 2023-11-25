@@ -1,4 +1,4 @@
-# CSGO-Tracker
+# CS2-Tracker
 
 Provides a Price Tracking Spreadsheet, Inventory Scraper, and Price Updater for CS2 items.
 
