@@ -1,11 +1,11 @@
 # CSGO-Tracker
 
-Provides a Price Tracking Spreadsheet, Inventory Scraper, and Price Updater for CSGO items.
+Provides a Price Tracking Spreadsheet, Inventory Scraper, and Price Updater for CS2 items.
 
 ## Spreadsheet
 
 ```
-Provides price tracking and metrics on the user's CSGO items.
+Provides price tracking and metrics on the user's CS2 items.
 ```
 
 ### Example
@@ -36,18 +36,17 @@ Below is an explanation of each column and metric used in the spreadsheet:
 To utilize Excel's built-in sorting and analysis features wihtout including summary boxes on the right:
 
 1. **Select Relevant Columns:** Highlight the relevant column letters.
-   
-3. **Access the Sort Ribbon:** Navigate to the "Home" tab in Excel's ribbon.
+2. **Access the Sort Ribbon:** Navigate to the "Home" tab in Excel's ribbon.
 
-4. **Initiate Sorting:** Click the ```'Sort & Filter'``` ribbon and select ```'Custom Sort'```, the user can then select which column to use as the key along with the sort direction.
+3. **Initiate Sorting:** Click the `'Sort & Filter'` ribbon and select `'Custom Sort'`, the user can then select which column to use as the key along with the sort direction.
 
 ## File Paths [```config.py```]
 
-- **base_path:** By default, the ```inventory.py``` script assumes that ```'base_file.xslx'``` (template to be populated) is at the same directory level, if not, change accordingly.
-- **file_path_local:** The output directory of the newly created spreadsheet after scraping items with ```inventory.py```, change the output name as desired. This is also used as the input file in ```csgo.py``` when updating values for a given spreadsheet.
-- **file_path_desktop:** Same file as ```'file_path_local'```.  If the file should also be available on your desktop, you can specify your desktop directory here, or you can leave as ```None``` if not needed.
-- **chrome_driver_executable_path:** Full path to the Chromdriver executable downloaded (ideally in the same directory as the scripts). If there is no chromedriver version mismatch, leave as ```None```.
-  
+- **base_path:** By default, the `inventory.py` script assumes that `'base_file.xslx'` (template to be populated) is at the same directory level, if not, change accordingly.
+- **file_path_local:** The output directory of the newly created spreadsheet after scraping items with `inventory.py`, change the output name as desired. This is also used as the input file in `cs2.py` when updating values for a given spreadsheet.
+- **file_path_desktop:** Same file as `'file_path_local'`. If the file should also be available on your desktop, you can specify your desktop directory here, or you can leave as `None` if not needed.
+- **chrome_driver_executable_path:** Full path to the Chromdriver executable downloaded (ideally in the same directory as the scripts). If there is no chromedriver version mismatch, leave as `None`.
+
 ```python
 1. base_path = 'base_file.xlsx'  # template file
 2. file_path_local = '<file_name>.xlsx'  # output file in same directory as scripts
@@ -56,7 +55,7 @@ To utilize Excel's built-in sorting and analysis features wihtout including summ
 
 ```
 
-The ```save_excel()``` functions in ```inventory.py``` and ```csgo.py``` save the output files to the directories specified in ```config.py```.
+The `save_excel()` functions in `inventory.py` and `cs2.py` save the output files to the directories specified in `config.py`.
 
 ```python
 def save_excel():
@@ -70,41 +69,37 @@ def save_excel():
 
 ## Inventory Scraper [```inventory.py```]
 
-
-Populates the template file with the user's marketable CSGO inventory items.  
+Populates the template file with the user's marketable CSGO inventory items.
 
 ![25e7c5b4109a1527aba62bc7097cdf20](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/b9361c20-5ed6-488b-bf08-52c794c1c722)
 
-
-### Chromedriver (attempts to fetch automatically)  
+### Chromedriver (attempts to fetch automatically)
 
 If by chance your Chrome version is very new, there may be a driver vesrison mismatch error,
-Chromedrivers can be downloaded from:   
+Chromedrivers can be downloaded from:  
 https://googlechromelabs.github.io/chrome-for-testing/#stable and https://chromedriver.chromium.org/downloads
 
 Simply drag and drop the Chromedriver executable into the same folder as the script.
 
 View your Chrome version here: chrome://settings/help
 
-## Price Updater [```csgo.py```]
+## Price Updater [```cs2.py```]
 
-
-Updates the user's spreadsheet with the current lowest Steam market price listing values (option A) or CSGO Trader daily/weekly averages (options B and C).  
+Updates the user's spreadsheet with the current lowest Steam market price listing values (option A), CSGO Trader daily/weekly averages (options B and C) or CSGO Trader's provided Skinport suggested price (option D).
 
 Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
-
+Option D may be useful for rare items where there Is not Steam sale data.
 
 ![1ffefa33de9cc8de11f246bf92c248d2](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/b2536e99-8829-4446-a688-f3f196281163)
 
-
 ## How To Run
 
-1. ```pip install -r requirements.txt```
-2. Configure file paths in ```config.py```
-3. ```python inventory.py``` Input your Steam inventory URL when prompted (inventory must be public)
+1. `pip install -r requirements.txt`
+2. Configure file paths in `config.py`
+3. `python inventory.py` Input your Steam inventory URL when prompted (inventory must be public)
 4. Fill in item purchase prices in the generated spreasheet
-5. ```python csgo.py``` to update item current values
+5. `python cs2.py` to update item current values
 
-## Additional Requirements 
+## Additional Requirements
 
-- Google Chrome (only for ```inventory.py```)
+- Google Chrome (only for `inventory.py`)
