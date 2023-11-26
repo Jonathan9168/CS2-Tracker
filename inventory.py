@@ -248,6 +248,7 @@ if __name__ == "__main__":
         'Restricted': '#8847FF',
         'Classified': '#D32CE6',
         'Covert': '#EB4B4B',
+        'Extraordinary': '#EB4B4B',
         'Contraband': '#E4AE33',
         'Clandestine': '#E4AE33',
         'UNNAMED': '#ADE55C',
@@ -260,6 +261,9 @@ if __name__ == "__main__":
         'Exceptional': '#8847FF',
         'Superior': '#D32CE6',
         'Master': '#EB4B4B',
+        'Souvenir': '#FFD700',
+        'StatTrak™': '#CF6A32',
+        '★': '#8650AC'
     }
 
     scrape_inventory()

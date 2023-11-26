@@ -61,7 +61,7 @@ def get_current_item_value_steam(name, ttw=3):
             return float(response_data['median_price'][1:])
 
         print(response_data)
-        print("An error occurred:", e)
+        print("An error occurred [ITEM NOT FOUND]:", e)
 
     return False
 
@@ -118,6 +118,7 @@ def get_current_item_value_cs_trader(name):
 
     except KeyError as e:
         print("An error occurred:", e)
+        return False
 
 
 def percentage_change(old_value, new_value):
@@ -191,7 +192,7 @@ def update_dataframe():
 
         if current_value is False:  # Invalid item due to typo in file or JSON response failure, don't update item and write "n"
             update_dataframe_failure(index)
-        else:  # Skin is valid: update processed items and percentage change cache, update item's;  value percentage change, current value and update item value modified status
+        else:  # Skin is valid: update processed items and percentage change cache, update item's; value percentage change, current value and update item value modified status
             update_cache(item_name, current_value, index)
             update_dataframe_on_success(index, item_name)
 
