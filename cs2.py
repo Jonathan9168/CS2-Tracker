@@ -275,7 +275,8 @@ def get_conversion_rate():
     url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=GBP"
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'html.parser')
-    return soup.find('p', class_='sc-295edd9f-1 jqMUXt').text[:-14]
+
+    return soup.find('span', class_='faded-digits').parent.text[:-14].strip()
 
 
 def main_menu():
