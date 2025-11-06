@@ -85,12 +85,22 @@ View your Chrome version here: chrome://settings/help
 
 ## Price Updater [```cs2.py```]
 
-Updates the user's spreadsheet with the current lowest Steam market price listing values (option A), CSGO Trader daily/weekly averages (options B and C) or CSGO Trader's provided Skinport suggested price (option D).
+Updates the user's spreadsheet with prices of your choice.
+
+- [A] Steam current lowest listing price
+- [B] CSGO Trader weekly average
+- [C] CSGO Trader daily average
+- [D] CSGO Trader's provided Skinport suggested price
+- [E] CSFloat's lowest listing price
+
+```diff
+@@ OPTIONS B,C,D ARE DEPRECATED @@
+```
 
 Option A is prone to rate limits so item requests are throttled by default to one every three seconds.
 Option D may be useful for rare items where there Is not Steam sale data.
 
-![1ffefa33de9cc8de11f246bf92c248d2](https://github.com/Jonathan9168/CSGO-Tracker/assets/77795437/b2536e99-8829-4446-a688-f3f196281163)
+![cs2](https://github.com/user-attachments/assets/d3b17f85-8887-4f42-81f8-d00bee7b5327)
 
 ## How To Run
 
