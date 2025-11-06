@@ -66,6 +66,50 @@ def get_current_item_value_steam(name, ttw=3):
     return False
 
 
+def get_current_item_value_cs_float(name):
+    """
+
+    Retrieves CS2 item minimum listing price from CSFloat API, prices are returned in cents
+
+    {
+        "market_hash_name": "10 Year Birthday Sticker Capsule",
+        "qty": 98,
+        "min_price": 104
+        },
+        {
+        "market_hash_name": "1st Lieutenant Farlow | SWAT",
+        "qty": 109,
+        "min_price": 1607
+        },
+        {
+        "market_hash_name": "2020 RMR Challengers",
+        "qty": 1562,
+        "min_price": 25
+        },
+        {
+        "market_hash_name": "AK-47 | Aquamarine Revenge (Battle-Scarred)",
+        "qty": 22,
+        "min_price": 3800
+        }
+
+    """
+
+    try:
+
+        price = cs_float_json[name]["min_price"]
+
+        if price is None:
+            return False
+
+        value = (float(price) / 100) * float(conversion_rate)
+
+        return check_floor(value)
+
+    except KeyError as e:
+        print("An error occurred:", e)
+        return False
+
+
 def get_current_item_value_cs_trader(name):
     """
 
@@ -111,14 +155,21 @@ def get_current_item_value_cs_trader(name):
 
         value = float(price) * float(conversion_rate)
 
-        # Steam price floor value
-        if value < 0.03:
-            return 0.03
-        return value
+        return check_floor(value)
 
     except KeyError as e:
         print("An error occurred:", e)
         return False
+
+
+def check_floor(value):
+    """
+         Steam price floor value
+    """
+
+    if value < 0.03:
+        return 0.03
+    return value
 
 
 def percentage_change(old_value, new_value):
@@ -187,6 +238,8 @@ def update_dataframe():
         # Skin hasn't been processed yet
         if option == "a":
             current_value = get_current_item_value_steam(name=item_name)
+        elif option == "e":
+            current_value = get_current_item_value_cs_float(name=item_name)
         else:
             current_value = get_current_item_value_cs_trader(name=item_name)
 
@@ -283,9 +336,11 @@ def main_menu():
     """Option Menu"""
 
     print("\n[A] Update current values using live Steam Prices")
-    print("[B] Update current values using CSGO Trader Steam 24hr Avg [Updated every 8 hours]")
-    print("[C] Update current values using CSGO Trader Steam 7day Avg [Updated every 8 hours]")
-    print("[D] Update current values using CSGO Trader Skinport Suggested Price [Updated every 8 hours]\n")
+    print("[B] Update current values using CSGO Trader Steam 24hr Avg [Updated every 8 hours][DEPRECATED]")
+    print("[C] Update current values using CSGO Trader Steam 7day Avg [Updated every 8 hours][DEPRECATED]")
+    print("[D] Update current values using CSGO Trader Skinport Suggested Price [Updated every 8 hours][DEPRECATED]")
+    print("[E] Update current values using CSGO Float Prices\n")
+
     choice = input("Select an option: ").strip().lower()
     print()
     return choice
@@ -294,7 +349,7 @@ def main_menu():
 if __name__ == "__main__":
 
     option = main_menu()
-    valid_options = {"a", "b", "c", "d"}
+    valid_options = {"a", "b", "c", "d", "e"}
 
     if option not in valid_options:
         print("invalid option")
@@ -304,6 +359,10 @@ if __name__ == "__main__":
 
     if option == "a":
         rate_limited = False
+    elif option == "e":
+        conversion_rate = get_conversion_rate().strip()
+        data = requests.get("https://csfloat.com/api/v1/listings/price-list").json()
+        cs_float_json = {item["market_hash_name"]: item for item in data}
     else:
         conversion_rate = get_conversion_rate().strip()
         cs_trader_json = requests.get("https://prices.csgotrader.app/latest/prices_v6.json").json()
